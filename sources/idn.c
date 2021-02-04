@@ -971,8 +971,11 @@ Datum idn_constants(PG_FUNCTION_ARGS)
 
         funcctx = SRF_FIRSTCALL_INIT();
         oldcontext = MemoryContextSwitchTo(funcctx->multi_call_memory_ctx);
-
+#if PG_VERSION_NUM >= 120000
+        tupdesc = CreateTemplateTupleDesc(3);
+#else
         tupdesc = CreateTemplateTupleDesc(3, false);
+#endif
         TupleDescInitEntry(tupdesc, (AttrNumber) 1, "name",
                            TEXTOID, -1, 0);
         TupleDescInitEntry(tupdesc, (AttrNumber) 2, "value",
